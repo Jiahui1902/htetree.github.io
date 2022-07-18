@@ -36,6 +36,7 @@ tree1 <- htetree::hte_ipw(outcomevariable = 'y',
                # no_indicater = '_IPW_simulation',
                legend.x = 0.1,legend.y = 0.25,varlabel = lb)
 ```
+![alt text](./figures/figure1.png?raw=true "Static Visualization for the Estimated Results")
 
 ### Interactive visualization using ShinyApp
 ```
