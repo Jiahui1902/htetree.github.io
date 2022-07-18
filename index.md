@@ -1,12 +1,7 @@
 ## Welcome to the homepage for `htetree`
 `htetree` is used to estimate heterogeneous treatment effect with tree-based machine learning algorithms and visualize estimated results in flexible and presentation-ready ways (see more in Brand et al., 2020). 
 
-This site includes causalTree_0.0.tar.gz used to build `causalTree` package in R.
-
-This site also includes htetree_0.1.6.tar.gz used to build `htetree` package in R. 
-
 ### Installation
-
 ```
 install.packages("htetree",
                  repos = "https://jiahui1902.github.io/drat/",
