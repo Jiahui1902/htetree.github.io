@@ -1,37 +1,68 @@
-## Welcome to GitHub Pages
+## Welcome to the homepage for `htetree`
 
 You can use the [editor on GitHub](https://github.com/Jiahui1902/htetree.github.io/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+`htetree` is used to estimate heterogeneous treatment effect with tree-based machine learning algorithms and visualize estimated results in flexible and presentation-ready ways (see more in Brand et al., 2020). 
 
-### Markdown
+This site includes causalTree_0.0.tar.gz used to build causalTree package in R.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+This site also includes htetree_0.1.6.tar.gz used to build htetree package in R. 
 
-```markdown
-Syntax highlighted code block
+### Installation
 
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+```
+install.packages("htetree",
+                 repos = "https://jiahui1902.github.io/drat/",
+                 type = "source")
+library("rpart")
+library("htetree")
+library(causalTree)
 ```
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+### Examples
 
-### Jekyll Themes
+```
+library(htetree)
+data("simulation.1")
+# estimate the propensity score
+fit <- glm(treatment~x1+x2+x3+x4+x5+x6+x7+x8+x9+x10,
+           data=simulation.1,
+           family = "binomial")
+simulation.1$ps_score <- predict(fit,type = "response")
+linear_terms <- paste0("x",1:10)
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/Jiahui1902/htetree.github.io/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+# estimate the model with htetree package
+set.seed(1)
+lb <- c(paste0("var",1:10),"propensity score")
+names(lb) <- c(paste0("x",1:10),"ps_score")
 
-### Support or Contact
+tree1 <- htetree::hte_ipw(outcomevariable = 'y',
+               minsize=20,crossvalidation = 40,negative = TRUE,
+               data = simulation.1,
+               ps_indicator = "ps_score",
+               drawplot = TRUE,treatment_indicator = "treatment",
+               # no_indicater = '_IPW_simulation',
+               legend.x = 0.1,legend.y = 0.25,varlabel = lb)
+```
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+### Interactive visualization using ShinyApp
+```
+# The saveFiles function saves all the necessary files for the shiny app in a user specified directory
+# By default it saves in your current working directory, in a folder named "shinyapp"
+# Be careful if you already have a folder named "shinyapp", it will overwrite
+# To check your working directory, use getwd()
+saveFiles(tree1, simulation.1, outcomevariable='y', treatment_indicator='treatment',
+          propensity_score="ps_score")
+
+# library(shiny) must be loaded to use runApp after creating the folder of files
+directory <- getDefaultPath()
+runApp(appDir = directory)
+
+# The runDynamic function runs the visualization without saving any of the files
+runDynamic(tree1, simulation.1, outcomevariable='y', treatment_indicator='treatment',
+           propensity_score="ps_score")
+
+# The files for runDynamic are saved in the temporary directory
+# The files can be cleared manually using the clearTemp() function, or will automatically be cleared when you close R
+clearTemp()
+```
