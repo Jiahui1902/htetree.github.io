@@ -1,1 +1,3 @@
 theme: jekyll-theme-minimal
+title: htetree
+description: An R package for estimating heterogeneous treatment effects with tree-based machine learning algorithms and creatively visualizing estimated results.
