@@ -59,3 +59,8 @@ runDynamic(tree1, simulation.1, outcomevariable='y', treatment_indicator='treatm
 # The files can be cleared manually using the clearTemp() function, or will automatically be cleared when you close R
 clearTemp()
 ```
+
+### References
+
+Brand, Jennie E., Jiahui Xu, Bernard Koch, and Pablo Geraldo. “Uncovering Sociological Effect Heterogeneity Using Tree-Based Machine Learning.”     *Sociological Methodology* 51, no. 2 (August 2021): 189–223. https://doi.org/10.1177/0081175021993503.
+
